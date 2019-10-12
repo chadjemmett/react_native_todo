@@ -2,31 +2,27 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, Text, TextInput} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import AppNavigator from './navigation/AppNavigator';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
-
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return (
-      <AppLoading
-        startAsync={loadResourcesAsync}
-        onError={handleLoadingError}
-        onFinish={() => handleFinishLoading(setLoadingComplete)}
-      />
-    );
-  } else {
-    return (
+  return(
       <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
+        <Text style={styles.header}> Todo List </Text>
+        <View style={styles.textInputContainer}>
+          <TextInput placeholder="What do you wantn to do today"
+            multiline={true}
+          />
+        </View>
       </View>
-    );
-  }
+      )
 }
+
+
+
 
 async function loadResourcesAsync() {
   await Promise.all([
@@ -57,6 +53,33 @@ function handleFinishLoading(setLoadingComplete) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#f5fcff',
   },
+
+  header: {
+    marginTop: '15%',
+    fontSize: 20,
+    color: 'red',
+    paddingBottom: 10,
+  },
+
+  textInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    borderBottomWidth: 1,
+    paddingRight: 10,
+    paddingBottom: 10,
+  },
+
+  textInput: {
+    flex: 1,
+    height: 20,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'black',
+    paddingLeft: 10,
+    minHeight: '3%',
+  }
 });
