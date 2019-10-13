@@ -12,6 +12,7 @@ import AppNavigator from './navigation/AppNavigator';
 export default function App(props) {
   const [value, setValue] = useState('');
   const [todos, setTodos] = useState([]);
+  const [locatoin] = useState()
 
   addTodo = () => {
     console.log("pressing add todo", value)
@@ -19,6 +20,7 @@ export default function App(props) {
       setTodos([...todos, {text: value, key: Date.now(), checked: false}]);
       setValue('');
     }
+  }
 
     checkTodo = id => {
       setTodos(
@@ -39,7 +41,7 @@ export default function App(props) {
 
     }
 
-  }
+
 
   return(
       <View style={styles.container}>
@@ -69,6 +71,8 @@ export default function App(props) {
       </View>
       )
 }
+
+
 
 
 
