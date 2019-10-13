@@ -2,21 +2,70 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View, Text, TextInput} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Platform, StatusBar, StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView} from 'react-native';
+import Icon from 'react-native-vector-icons/Feather'
+import TodoList from './screens/TodoList';
+// import { Ionicons } from '@expo/vector-icons';
 
 import AppNavigator from './navigation/AppNavigator';
 
 export default function App(props) {
-  const [isLoadingComplete, setLoadingComplete] = useState(false);
+  const [value, setValue] = useState('');
+  const [todos, setTodos] = useState([]);
+
+  addTodo = () => {
+    console.log("pressing add todo", value)
+    if(value.length > 0) {
+      setTodos([...todos, {text: value, key: Date.now(), checked: false}]);
+      setValue('');
+    }
+
+    checkTodo = id => {
+      setTodos(
+          todos.map(todo => {
+            if(todo.key === id) todo.checked = !todo.checked;
+            return todo
+          })
+          )
+
+    }
+
+    deleteTodo = id => {
+      setTodos(
+          todos.filter(todo => {
+            if (todo.key !== id) return true
+          })
+          )
+
+    }
+
+  }
+
   return(
       <View style={styles.container}>
         <Text style={styles.header}> Todo List </Text>
         <View style={styles.textInputContainer}>
-          <TextInput placeholder="What do you wantn to do today"
+          <TextInput placeholder="What do you want to do today"
             multiline={true}
+            onChangeText={value => setValue(value)}
+            value={value}
           />
+          <TouchableOpacity onPress={() => addTodo()}>
+            <Icon name="plus" size={30} color="blue" style={{marginLeft: 15}} />
+          </TouchableOpacity>
         </View>
+        <ScrollView style={{width: '100%'}}>
+        {todos.map(item => (
+          <TodoList 
+            text={item.text} 
+            key={item.key}
+            checked={item.checked}
+            setChecked={() => checkTodo(item.key)}
+            deleteTodo={() => deleteTodo(item.key)}
+            />
+        ))}
+        </ScrollView>
+
       </View>
       )
 }
